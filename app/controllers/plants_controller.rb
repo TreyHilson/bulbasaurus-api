@@ -1,4 +1,4 @@
-class PlantsController < ApplicationController
+class PlantsController < OpenReadController
   before_action :set_plant, only: %i[show update destroy]
 
   # GET /plants
@@ -15,12 +15,13 @@ class PlantsController < ApplicationController
 
   # POST /plants
   def create
-    @plant = Plant.new(plant_params)
+    @plant = current_user.plants.build(plant_params)
 
     if @plant.save
-      render json: @plant, status: :created, location: @plant
+      render json: @plant, status: :created
     else
-      render json: @plant.errors, status: :unprocessable_entity
+    render json: @plant.errors, status: :unprocessable_entity
+
     end
   end
 
@@ -39,13 +40,14 @@ class PlantsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_plant
-      @plant = Plant.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_plant
+    @plant = current_user.plants.find(params[:id])
 
-    # Only allow a trusted parameter "white list" through.
-    def plant_params
-      params.require(:plant).permit(:plant_species, :nickname, :facts)
-    end
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def plant_params
+  params.require(:plant).permit(:plant_species, :nickname, :facts)
+  end
 end
