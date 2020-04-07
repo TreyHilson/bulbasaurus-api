@@ -1,9 +1,9 @@
-class PlantsController < OpenReadController
+class PlantsController < ProtectedController
   before_action :set_plant, only: %i[show update destroy]
 
   # GET /plants
   def index
-    @plants = Plant.all
+    @plants = current_user.plants.all
 
     render json: @plants
   end
