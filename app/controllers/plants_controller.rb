@@ -1,4 +1,4 @@
-class PlantsController < ProtectedController
+class PlantsController < OpenReadController
   before_action :set_plant, only: %i[show update destroy]
 
   # GET /plants
